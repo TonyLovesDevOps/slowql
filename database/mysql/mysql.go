@@ -80,7 +80,10 @@ func (db *Database) parseMySQLHeader(line string, q *query.Query) {
 			date := parts[idx+1]
 			q.Time, err = time.Parse(time.RFC3339, date)
 			if err != nil {
-				logrus.Errorf("time: error converting %s to time: %s", parts[idx+1], err)
+				q.Time, err = time.Parse("060102 15:04:05", date)
+				if err != nil {
+					logrus.Errorf("time: error converting %s to time: %s", parts[idx+1], err)
+				}
 			}
 
 		} else if strings.Contains(part, "rows_sent:") {
